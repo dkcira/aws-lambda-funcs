@@ -2,6 +2,10 @@ import boto3
 import json
 
 
+LAMBDA_ROLE = 'Lambda_Execution_Role'
+LAMBDA_ACCESS_POLICY_ARN = 'arn:aws:iam::094380402750:policy/LambdaS3AccessPolicy'
+LAMBDA_ROLE_ARN = 'arn:aws:iam::094380402750:role/Lambda_Execution_Role'
+
 def lambda_client():
     aws_lambda = boto3.client('lambda', region='us-east-2')
     """ :type : pyboto3.lambda """
@@ -46,11 +50,29 @@ def create_execution_role_for_lambda():
                 "Effect": "Allow",
                 "Principal": {
                     "Service": "lambda.amazonaws.com"
-                }
+                },
                 "Action": "sts:AssumeRole"
             }
         ]
     }
 
+    return iam_client().create_role(
+        RoleName = LAMBDA_ROLE,
+        AssumeRolePolicyDocument = json.dumps(lambda_execution_assumption_role),
+        Description = "Gives necessary permissions for lambda to be executed."
+    )
+
+
+def attach_access_policy_to_execution_role():
+    return iam_client().attach_role_policy(
+        RoleName = LAMBDA_ROLE,
+        PolicyArn = LAMBDA_ACCESS_POLICY_ARN
+    )
+
+def deploy_lambda_function(function_name, runtime, handler, role_arn, source_folder):
+
+
 if __name__ == '__main__':
-    print(create_access_policy_for_lambda())
+    # print(create_access_policy_for_lambda())
+    # print(create_execution_role_for_lambda())
+    print(attach_access_policy_to_execution_role())
