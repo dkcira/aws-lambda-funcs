@@ -1,6 +1,6 @@
 import boto3
 import json
-
+from os import path
 
 LAMBDA_ROLE = 'Lambda_Execution_Role'
 LAMBDA_ACCESS_POLICY_ARN = 'arn:aws:iam::094380402750:policy/LambdaS3AccessPolicy'
@@ -69,8 +69,11 @@ def attach_access_policy_to_execution_role():
         PolicyArn = LAMBDA_ACCESS_POLICY_ARN
     )
 
-def deploy_lambda_function(function_name, runtime, handler, role_arn, source_folder):
 
+def deploy_lambda_function(function_name, runtime, handler, role_arn, source_folder):
+    # read everything from source_folder under the present path
+    folder_path = path.join(path.dirname(path.abspath(__file__)), source_folder)
+    zip_file = Utils.make_zip_file_bytes(path = folder_path)
 
 if __name__ == '__main__':
     # print(create_access_policy_for_lambda())
