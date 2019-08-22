@@ -20,3 +20,9 @@ class Utils:
                 full_path = os.path.join(root, f)
                 archive_name = full_path[len(path) + len(os.sep):]
                 yield full_path, archive_name
+    
+    @staticmethod
+    def read_jar_file(path):
+        with open(path, 'rb') as binary_file:
+            data = binary_file.read()
+        return data
