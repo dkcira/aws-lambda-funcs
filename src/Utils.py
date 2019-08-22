@@ -1,12 +1,14 @@
 import os
 import io
+
 from zipfile import ZipFile
+
 
 class Utils:
     @staticmethod
     def make_zip_file_bytes(path):
         buf = io.BytesIO()
-        with ZipFile(bug, 'w') as z:
+        with ZipFile(buf, 'w') as z:
             for full_path, archive_name in Utils.files_to_zip(path=path):
                 z.write(full_path, archive_name)
         return buf.getvalue()
