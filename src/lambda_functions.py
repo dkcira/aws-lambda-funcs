@@ -13,6 +13,9 @@ LAMBDA_HANDLER = 'lambda_function.handler'
 PYTHON_36_RUNTIME = 'python3.6'
 PYTHON_LAMBDA_NAME = 'PythonLambdaFunction'
 
+NODEJS_810_RUNTIME = 'nodejs8.10'
+NODEJS_LAMBDA_NAME ='NodeJSLambdaFunction'
+
 def lambda_client():
     aws_lambda = boto3.client('lambda', region_name='us-east-2')
     """ :type : pyboto3.lambda """
@@ -100,4 +103,21 @@ if __name__ == '__main__':
     # print(create_access_policy_for_lambda())
     # print(create_execution_role_for_lambda())
     # print(attach_access_policy_to_execution_role())
-    print(deploy_lambda_function(PYTHON_LAMBDA_NAME, PYTHON_36_RUNTIME, LAMBDA_HANDLER, LAMBDA_ROLE_ARN, 'python_lambda'))
+    # print(
+    #   deploy_lambda_function(
+    #       PYTHON_LAMBDA_NAME,
+    #       PYTHON_36_RUNTIME,
+    #       LAMBDA_HANDLER,
+    #       LAMBDA_ROLE_ARN,
+    #       'python_lambda' # source folder
+    #     )
+    # )
+    print(
+        deploy_lambda_function(
+            NODEJS_LAMBDA_NAME,
+            NODEJS_810_RUNTIME,
+            LAMBDA_HANDLER,
+            LAMBDA_ROLE_ARN,
+            'nodejs_lambda' # source folder
+        )
+    )
