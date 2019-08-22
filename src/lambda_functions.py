@@ -87,7 +87,11 @@ def attach_access_policy_to_execution_role():
 def deploy_lambda_function(function_name, runtime, handler, role_arn, source_folder):
     # read everything from source_folder under the present path
     folder_path = path.join(path.dirname(path.abspath(__file__)), source_folder)
-    zip_file = Utils.make_zip_file_bytes(path=folder_path)
+
+    if runtime is not JAVA_8_RUNTIME:
+        zip_file = Utils.make_zip_file_bytes(path=folder_path)
+    else:
+        zip_file = Utils.read_jar_file(folder_path)
 
     return lambda_client().create_function(
         FunctionName=function_name,
@@ -107,7 +111,8 @@ if __name__ == '__main__':
     # print(create_access_policy_for_lambda())
     # print(create_execution_role_for_lambda())
     # print(attach_access_policy_to_execution_role())
-    # # deploy python lambda
+    #
+    #  # deploy python lambda
     # print(
     #   deploy_lambda_function(
     #       PYTHON_LAMBDA_NAME,
@@ -117,6 +122,7 @@ if __name__ == '__main__':
     #       'python_lambda' # source folder
     #     )
     # )
+    #
     # # deploy javascript lambda
     # print(
     #     deploy_lambda_function(
@@ -130,10 +136,10 @@ if __name__ == '__main__':
     # deploy java lambda
     print(
         deploy_lambda_function(
-            NODEJS_LAMBDA_NAME,
-            NODEJS_810_RUNTIME,
-            LAMBDA_HANDLER,
+            JAVA_LAMBDA_NAME,
+            JAVA_8_RUNTIME,
+            'com.amazonaws.lambda.demo.LambdaFunctionHandler::handleRequest',
             LAMBDA_ROLE_ARN,
-            'nodejs_lambda' # source folder
+            'java_lambda/demo-1.0.0.jar' # source folder (file for java)
         )
     )
